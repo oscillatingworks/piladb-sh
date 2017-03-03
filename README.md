@@ -10,7 +10,7 @@ Requirements
 
 * Unix/Linux machine with bash, zsh or similar shell in use.
 * HTTPie: https://github.com/jkbrzt/httpie#installation
-* PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205
+* PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205 — mandatory for remote server.
 * `pilad` binary in `$PATH` — only for local server: https://docs.piladb.org/getting_started/installation.html
 
 Installation
@@ -35,7 +35,7 @@ Run `bash piladb_test.sh`.
 Examples
 --------
 
-Start a server, create a database and a stack, `PUSH` random number
+Start a local server, create a database and a stack, `PUSH` random number
 from 1 to 10, and stop the server:
 
 ```bash
@@ -53,6 +53,14 @@ piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
 piladb_POP MYDB MYSTACK
 
 piladb_stop
+```
+
+Connect to a remote server, check status:
+
+```bash
+export PILADB_HOST=mypiladb.example.com
+
+piladb_status
 ```
 
 License

@@ -30,28 +30,28 @@ _require_host () {
 
 _piladb_get () {
   _require http
-  _require_host
+  _require_host || return 1
 
   http $PILADB_HOST/$1
 }
 
 _piladb_put () {
   _require http
-  _require_host
+  _require_host || return 1
 
   http PUT $PILADB_HOST/$1
 }
 
 _piladb_post () {
   _require http
-  _require_host
+  _require_host || return 1
 
   http POST $PILADB_HOST/$1 element=$2
 }
 
 _piladb_delete () {
   _require http
-  _require_host
+  _require_host || return 1
 
   http DELETE $PILADB_HOST/$1
 }
@@ -125,7 +125,7 @@ piladb_help () {
 requirements:
 
   httpie: https://github.com/jkbrzt/httpie#installation
-  PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205
+  PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205  # mandatory for remote server
   pilad in PATH: https://docs.piladb.org/getting_started/installation.html  # only for local server
 
 thank you!
@@ -143,6 +143,9 @@ piladb_start () {
 
   _log "starting pilad in port ${PORT} logging to ${LOG_FILE}"
   pilad -port $PORT &> $LOG_FILE &
+
+  # we override PILADB_HOST, as we are using a piladb local server
+  export PILADB_HOST="127.0.0.1:$PORT"
 }
 
 piladb_stop () {
