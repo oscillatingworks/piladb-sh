@@ -43,7 +43,7 @@ from 1 to 10, and stop the server:
 piladb_start
 
 piladb_create_database MYDB
-piladb_create_stack MYDB
+piladb_create_stack MYDB MYSTACK
 
 piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
 piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
