@@ -76,6 +76,9 @@ piladb_help () {
   # running on port 1205
   piladb_stop [$pid]
 
+  # ping piladb
+  piladb_ping
+
   # show status of piladb
   piladb_status
 
@@ -183,6 +186,10 @@ piladb_stop () {
     _log "killing pilad running in ${PILADB_PID}"
     kill "${PILADB_PID}"
   fi
+}
+
+piladb_ping () {
+  _piladb_get "_ping"
 }
 
 piladb_status () {
