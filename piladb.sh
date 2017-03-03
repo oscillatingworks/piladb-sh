@@ -7,7 +7,7 @@ _log () {
 }
 
 _exit_or_return () {
-  [ "$PS1" ] && return || exit $1;
+  [ "$PS1" ] && return $1 || exit $1;
 }
 
 _err_exit () {
@@ -16,7 +16,7 @@ _err_exit () {
 }
 
 _require () {
-  which $1 > /dev/null || _err_exit "$0 requires '$1'"
+  which $1 > /dev/null || _err_exit "piladb requires '$1'"
 }
 
 _require_host () {
@@ -126,6 +126,7 @@ requirements:
 
   httpie: https://github.com/jkbrzt/httpie#installation
   PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205
+  pilad in PATH: https://docs.piladb.org/getting_started/installation.html  # only for local server
 
 thank you!
 
@@ -135,7 +136,7 @@ thank you!
 }
 
 piladb_start () {
-  _require pilad
+  _require pilad || return 1
 
   local PORT="${1:-"1205"}"
   local LOG_FILE="${2:-"pilad.log"}"
