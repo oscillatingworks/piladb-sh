@@ -21,7 +21,7 @@ _require () {
 
 _require_host () {
   if [ -z "$PILADB_HOST" ]; then
-    _log "env: please set PILADB_HOST, e.g. export PILADB_HOST=127.0.0.1:9200"
+    _log "env: please set PILADB_HOST, e.g. export PILADB_HOST=127.0.0.1:1205"
     _exit_or_return 1
   fi
 }
