@@ -13,7 +13,6 @@ piladb_download
 
 # start test pilad
 
-piladb_stop
 piladb_start
 
 

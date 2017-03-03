@@ -162,7 +162,7 @@ piladb_download () {
 }
 
 piladb_start () {
-  _require pilad || _log "try with piladb_download maybe?" ; return 1
+  _require pilad || return 1
 
   local PORT="${1:-"1205"}"
   local LOG_FILE="${2:-"pilad.log"}"
