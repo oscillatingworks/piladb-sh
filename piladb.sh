@@ -74,7 +74,7 @@ piladb_help () {
   # stop local pilad
   # if pid is not set, it will stop a pilad process
   # running on port 1205
-  piladb_start $pid
+  piladb_stop [$pid]
 
   # show status of piladb
   piladb_status
