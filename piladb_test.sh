@@ -3,9 +3,12 @@
 set -e
 
 source piladb.sh
-_require jq
+_require jq || exit 1
 
-export PILADB_HOST=127.0.0.1:1205
+
+# download pilad from Github
+
+piladb_download
 
 
 # start test pilad

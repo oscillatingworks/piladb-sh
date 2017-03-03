@@ -61,6 +61,11 @@ _piladb_delete () {
 piladb_help () {
   _log 'usage: piladb_*
 
+  # download pilad in $HOME/bin and add it to PATH
+  # version: default is 0.1.1
+  # os: linux, darwin. default is linux.
+  piladb_download [version] [os]
+
   # start local pilad
   # if port is not set, it will default to 1205
   # if log_file is not set, it will default to pilad.log
@@ -133,6 +138,28 @@ thank you!
   https://www.piladb.org
   https://github.com/oscillatingworks/piladb-sh
   https://twitter.com/oscillatingw'
+}
+
+piladb_download () {
+  local VERSION="${1:-"0.1.1"}"
+  local OS="${2:-"linux"}"
+
+  _log "Downloading version piladb${VERSION}.${OS}-${ARCH}.tar.gz..."
+  local DOWNLOAD_URL="https://github.com/fern4lvarez/piladb/releases/download/v${VERSION}/piladb${VERSION}.${OS}-amd64.tar.gz"
+  wget -q "$DOWNLOAD_URL"
+
+  _log "Extracting in ${PWD}..."
+  tar -zxvf "piladb${VERSION}.${OS}-amd64.tar.gz"
+
+  _log "Moving binary to ${HOME}/bin..."
+  mkdir -p "${HOME}/bin"
+  mv pilad "${HOME}/bin"
+  export PATH="${PATH}:${HOME}/bin"
+
+  _log "Cleanup..."
+  rm "piladb${VERSION}.${OS}-amd64.tar.gz"
+
+  _log "Done! $(pilad -v)"
 }
 
 piladb_start () {

@@ -63,6 +63,13 @@ export PILADB_HOST=mypiladb.example.com
 piladb_status
 ```
 
+Download later version of `pilad` and start server:
+
+```bash
+piladb_download
+piladb_start
+```
+
 License
 -------
 
