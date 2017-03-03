@@ -32,28 +32,28 @@ _piladb_get () {
   _require http
   _require_host || return 1
 
-  http $PILADB_HOST/$1
+  http "$PILADB_HOST/$1"
 }
 
 _piladb_put () {
   _require http
   _require_host || return 1
 
-  http PUT $PILADB_HOST/$1
+  http PUT "$PILADB_HOST/$1"
 }
 
 _piladb_post () {
   _require http
   _require_host || return 1
 
-  http POST $PILADB_HOST/$1 element=$2
+  http POST "$PILADB_HOST/$1" element="$2"
 }
 
 _piladb_delete () {
   _require http
   _require_host || return 1
 
-  http DELETE $PILADB_HOST/$1
+  http DELETE "$PILADB_HOST/$1"
 }
 
 ### PILADB FUNCTIONS
@@ -315,7 +315,7 @@ piladb_delete_stack () {
 piladb_PUSH () {
   local DATABASE_NAME="$1"
   local STACK_NAME="$2"
-  local ELEMENT="$3"
+  local ELEMENT="${@:3}"
 
   if [ -z "$DATABASE_NAME" ]; then
     _log "push: please provide a database name"
@@ -327,7 +327,7 @@ piladb_PUSH () {
     _log "push: please provide an element"
     _exit_or_return 1
   else
-    _piladb_post "databases/${DATABASE_NAME}/stacks/${STACK_NAME}" $ELEMENT
+    _piladb_post "databases/${DATABASE_NAME}/stacks/${STACK_NAME}" "$ELEMENT"
   fi
 }
 
