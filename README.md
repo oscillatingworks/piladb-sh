@@ -9,7 +9,7 @@ Requirements
 ------------
 
 * Unix/Linux machine with bash, zsh or similar shell in use.
-* HTTPie: httpie: https://github.com/jkbrzt/httpie#installation
+* HTTPie: https://github.com/jkbrzt/httpie#installation
 * PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205
 
 Installation
