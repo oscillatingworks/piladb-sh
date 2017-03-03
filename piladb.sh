@@ -62,9 +62,13 @@ piladb_help () {
   _log 'usage: piladb_*
 
   # start local pilad
+  # if port is not set, it will default to 1205
+  # if log_file is not set, it will default to pilad.log
   piladb_start [$port:1205] [$log_file:pilad.log]
 
   # stop local pilad
+  # if pid is not set, it will stop a pilad process
+  # running on port 1205
   piladb_start $pid
 
   # show status of piladb
