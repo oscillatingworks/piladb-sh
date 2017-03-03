@@ -11,7 +11,6 @@ Requirements
 * Unix/Linux machine with bash, zsh or similar shell in use.
 * HTTPie: https://github.com/jkbrzt/httpie#installation
 * PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205 — mandatory for remote server.
-* `pilad` binary in `$PATH` — only for local server: https://docs.piladb.org/getting_started/installation.html
 
 Installation
 ------------

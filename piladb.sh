@@ -131,7 +131,6 @@ requirements:
 
   httpie: https://github.com/jkbrzt/httpie#installation
   PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205  # mandatory for remote server
-  pilad in PATH: https://docs.piladb.org/getting_started/installation.html  # only for local server
 
 thank you!
 
@@ -163,7 +162,7 @@ piladb_download () {
 }
 
 piladb_start () {
-  _require pilad || return 1
+  _require pilad || _log "try with piladb_download maybe?" ; return 1
 
   local PORT="${1:-"1205"}"
   local LOG_FILE="${2:-"pilad.log"}"
