@@ -146,7 +146,7 @@ piladb_download () {
   local VERSION="${1:-"0.1.2"}"
   local OS="${2:-"linux"}"
 
-  _log "Downloading piladb${VERSION}.${OS}-${ARCH}.tar.gz..."
+  _log "Downloading piladb${VERSION}.${OS}-amd64.tar.gz..."
   local DOWNLOAD_URL="https://github.com/fern4lvarez/piladb/releases/download/v${VERSION}/piladb${VERSION}.${OS}-amd64.tar.gz"
   wget -q "$DOWNLOAD_URL"
 
