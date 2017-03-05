@@ -143,7 +143,7 @@ thank you!
 }
 
 piladb_download () {
-  local VERSION="${1:-"0.1.1"}"
+  local VERSION="${1:-"0.1.2"}"
   local OS="${2:-"linux"}"
 
   _log "Downloading piladb${VERSION}.${OS}-${ARCH}.tar.gz..."
