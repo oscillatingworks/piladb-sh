@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eo pipefail
+set -e
 
 source piladb.sh
 _require jq || exit 1
@@ -32,19 +32,19 @@ pid=$(piladb_status | jq '.pid')
 piladb_config
 
 max_stack_size=$(piladb_config_get MAX_STACK_SIZE | jq '.element')
-if [ "$max_stack_size" != "-1" ]; then
+if [ "$max_stack_size" != -1 ]; then
    _log "ERROR: MAX_STACK_SIZE is $max_stack_size, expected -1"
-   piladb_stop
+   piladb_stop $pid
    exit 1
 fi
 
 piladb_config_set MAX_STACK_SIZE 10
 
 max_stack_size=$(piladb_config_get MAX_STACK_SIZE | jq '.element')
-if [ "$max_stack_size" != '"10"' ]; then
+if [ "$max_stack_size" != 10 ]; then
    _log "wrong MAX_STACK_SIZE is $max_stack_size, expected 10"
-   piladb_stop
-   exit
+   piladb_stop $pid
+   exit 1
 fi
 
 
@@ -92,26 +92,27 @@ fi
 
 piladb_show_stack db1 mystack1
 
+piladb_PUSH db1 mystack1 false
+piladb_PUSH db1 mystack1 '{"json":"example"}'
 piladb_PUSH db1 mystack1 1
-piladb_PUSH db1 mystack1 2
-piladb_PUSH db1 mystack1 3
+piladb_PUSH db1 mystack1 '"this is a string"'
 
 popped=$(piladb_POP db1 mystack1 | jq '.element')
-if [ "$popped" != '"3"' ]; then
-   _log "ERROR: popped is $popped, expected 3"
+if [ "$popped" != '"this is a string"' ]; then
+   _log "ERROR: popped is $popped, expected \"this is a string\""
    piladb_stop $pid
    exit 1
 fi
 
 peek=$(piladb_PEEK db1 mystack1 | jq '.element')
-if [ "$peek" != '"2"' ]; then
-   _log "ERROR: peek is $peek, expected 2"
+if [ "$peek" != 1 ]; then
+   _log "ERROR: peek is $peek, expected 1"
    piladb_stop $pid
    exit 1
 fi
 
 size=$(piladb_SIZE db1 mystack1)
-if [ "$size" -ne "2" ]; then
+if [ "$size" -ne 3 ]; then
    _log "ERROR: size is $size, expected 2"
    piladb_stop $pid
    exit 1

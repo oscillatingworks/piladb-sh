@@ -46,7 +46,7 @@ _piladb_post () {
   _require http
   _require_host || return 1
 
-  http POST "$PILADB_HOST/$1" element="$2"
+  http POST "$PILADB_HOST/$1" "element:=${@:2}"
 }
 
 _piladb_delete () {
