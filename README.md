@@ -10,7 +10,7 @@ Requirements
 
 * Unix/Linux machine with bash, zsh or similar shell in use.
 * HTTPie: https://github.com/jkbrzt/httpie#installation
-* `PILADB_HOST` set for remote server, e.g. export `PILADB_HOST=piladb.example.org`
+* `PILADB_HOST` set for remote server, e.g. `export PILADB_HOST=piladb.example.org`
 
 Installation
 ------------
