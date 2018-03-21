@@ -1,4 +1,4 @@
-piladb Shell Client [![osw](https://img.shields.io/badge/%E2%89%85osw-supported-blue.svg)](http://oscillating.works)
+piladb Shell Client [![osw](https://img.shields.io/badge/%E2%89%85osw-supported-blue.svg)](http://oscillating.works)[![Build Status](https://travis-ci.org/oscillatingworks/piladb-sh.svg?branch=master)](https://travis-ci.org/oscillatingworks/piladb-sh)
 ===================
 
 `piladb.sh` is a set of utilities to interact with [**piladb**](https://www.piladb.org)
