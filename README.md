@@ -45,9 +45,10 @@ piladb_start
 piladb_create_database MYDB
 piladb_create_stack MYDB MYSTACK
 
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
+piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )))
+piladb_PUSH MYDB MYSTACK '"A string"'
+piladb_PUSH MYDB MYSTACK true
+piladb_PUSH MYDB MYSTACK '{"country":"ES"}'
 
 piladb_POP MYDB MYSTACK
 
