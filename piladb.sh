@@ -62,7 +62,7 @@ piladb_help () {
   _log 'usage: piladb_*
 
   # download pilad in $HOME/bin and add it to PATH
-  # version: default is 0.1.1
+  # version: default is 0.1.5
   # os: linux, darwin. default is linux.
   piladb_download [version] [os]
 
@@ -143,7 +143,7 @@ thank you!
 }
 
 piladb_download () {
-  local VERSION="${1:-"0.1.2"}"
+  local VERSION="${1:-"0.1.5"}"
   local OS="${2:-"linux"}"
 
   _log "Downloading piladb${VERSION}.${OS}-amd64.tar.gz..."
