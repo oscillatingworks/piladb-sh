@@ -1,4 +1,4 @@
-piladb Shell Client [![osw](https://img.shields.io/badge/%E2%89%85osw-supported-blue.svg)](http://oscillating.works)
+piladb Shell Client [![osw](https://img.shields.io/badge/%E2%89%85osw-supported-blue.svg)](http://oscillating.works) [![Build Status](https://travis-ci.org/oscillatingworks/piladb-sh.svg?branch=master)](https://travis-ci.org/oscillatingworks/piladb-sh)
 ===================
 
 `piladb.sh` is a set of utilities to interact with [**piladb**](https://www.piladb.org)
@@ -10,7 +10,7 @@ Requirements
 
 * Unix/Linux machine with bash, zsh or similar shell in use.
 * HTTPie: https://github.com/jkbrzt/httpie#installation
-* PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205 — mandatory for remote server.
+* `PILADB_HOST` set for remote server, e.g. export `PILADB_HOST=piladb.example.org`
 
 Installation
 ------------
@@ -45,9 +45,10 @@ piladb_start
 piladb_create_database MYDB
 piladb_create_stack MYDB MYSTACK
 
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
-piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )  + 1 ))
+piladb_PUSH MYDB MYSTACK $(( ( RANDOM % 10 )))
+piladb_PUSH MYDB MYSTACK '"A string"'
+piladb_PUSH MYDB MYSTACK true
+piladb_PUSH MYDB MYSTACK '{"country":"ES"}'
 
 piladb_POP MYDB MYSTACK
 
@@ -62,7 +63,7 @@ export PILADB_HOST=mypiladb.example.com
 piladb_status
 ```
 
-Download later version of `pilad` and start server:
+Download latest version of `pilad` and start server:
 
 ```bash
 piladb_download
