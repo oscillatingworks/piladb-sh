@@ -10,7 +10,7 @@ Requirements
 
 * Unix/Linux machine with bash, zsh or similar shell in use.
 * HTTPie: https://github.com/jkbrzt/httpie#installation
-* PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205 — mandatory for remote server.
+* `PILADB_HOST` set for remote server, e.g. export `PILADB_HOST=piladb.example.org`
 
 Installation
 ------------
@@ -62,7 +62,7 @@ export PILADB_HOST=mypiladb.example.com
 piladb_status
 ```
 
-Download later version of `pilad` and start server:
+Download latest version of `pilad` and start server:
 
 ```bash
 piladb_download
