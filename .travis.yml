@@ -1,0 +1,7 @@
+language: bash
+
+before_script:
+    - sudo apt-get install -y httpie
+
+script:
+    - bash piladb_test.sh
