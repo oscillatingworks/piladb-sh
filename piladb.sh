@@ -32,7 +32,7 @@ _piladb_get () {
   _require http
   _require_host || return 1
 
-  http "$PILADB_HOST/$1"
+  http "$PILADB_HOST/$1?$2"
 }
 
 _piladb_put () {
@@ -49,6 +49,13 @@ _piladb_post () {
   http POST "$PILADB_HOST/$1" "element:=${@:2}"
 }
 
+_piladb_post_no_payload () {
+  _require http
+  _require_host || return 1
+
+  http POST "$PILADB_HOST/$1"
+}
+
 _piladb_delete () {
   _require http
   _require_host || return 1
@@ -60,6 +67,11 @@ _piladb_delete () {
 
 piladb_help () {
   _log 'usage: piladb_*
+
+  # if you want to use piladb in a remote host,
+  # you can set PILADB_HOST for that purpose.
+  # e.g. export PILADB_HOST=my.piladb.server:8080
+  # default value is 127.0.0.1:1205
 
   # download pilad in $HOME/bin and add it to PATH
   # version: default is 0.1.5
@@ -92,19 +104,19 @@ piladb_help () {
   piladb_config_set $config_value $config_key
 
   # show databases
-  piladb_show_databases
+  piladb_databases
 
   # create database
   piladb_create_database $database_name
 
   # show database
-  piladb_show_database $database_name
+  piladb_database $database_name
 
   # delete database
   piladb_delete_database $database_name
 
   # show stacks in database
-  piladb_show_stack $database_name
+  piladb_stack $database_name
 
   # create stack in database
   piladb_create_stack $database_name $stack_name
@@ -118,22 +130,39 @@ piladb_help () {
   # PUSH element
   piladb_PUSH $database_name $stack_name $element
 
+  # BASE element
+  piladb_BASE $database_name $stack_name $element
+
   # POP element
   piladb_POP $database_name $stack_name
 
   # PEEK element
   piladb_PEEK $database_name $stack_name
 
+  # FLUSH stack
+  piladb_FLUSH $database_name $stack_name
+
+  # ROTATE stack
+  piladb_ROTATE $database_name $stack_name
+
+  # BLOCK stack
+  piladb_BLOCK $database_name $stack_name
+
+  # UNBLOCK stack
+  piladb_UNBLOCK $database_name $stack_name
+
   # SIZE of stack
   piladb_SIZE $database_name $stack_name
 
-  # FLUSH stack
-  piladb_FLUSH $database_name $stack_name
+  # Stack is EMPTY
+  piladb_SIZE $database_name $stack_name
+
+  # Stack is FULL
+  piladb_FULL $database_name $stack_name
 
 requirements:
 
   httpie: https://github.com/jkbrzt/httpie#installation
-  PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205  # mandatory for remote server
 
 thank you!
 
@@ -150,18 +179,22 @@ piladb_download () {
   local DOWNLOAD_URL="https://github.com/fern4lvarez/piladb/releases/download/v${VERSION}/piladb${VERSION}.${OS}-amd64.tar.gz"
   wget -q "$DOWNLOAD_URL"
 
-  _log "Extracting in ${PWD}..."
-  tar -zxvf "piladb${VERSION}.${OS}-amd64.tar.gz"
+  if [ $? -ne 0 ]; then
+    _err_exit "Version ${VERSION} does not exist or error downloading it. Exiting..."
+  else
+    _log "Extracting in ${PWD}..."
+    tar -zxvf "piladb${VERSION}.${OS}-amd64.tar.gz"
 
-  _log "Moving binary to ${HOME}/bin..."
-  mkdir -p "${HOME}/bin"
-  mv pilad "${HOME}/bin"
-  export PATH="${PATH}:${HOME}/bin"
+    _log "Moving binary to ${HOME}/bin..."
+    mkdir -p "${HOME}/bin"
+    mv pilad "${HOME}/bin"
+    export PATH="${PATH}:${HOME}/bin"
 
-  _log "Cleanup..."
-  rm "piladb${VERSION}.${OS}-amd64.tar.gz"
+    _log "Cleanup..."
+    rm "piladb${VERSION}.${OS}-amd64.tar.gz"
 
-  _log "Done! $(pilad -v)"
+    _log "Done! $(pilad -v)"
+  fi
 }
 
 piladb_start () {
@@ -226,7 +259,7 @@ piladb_config_set () {
   fi
 }
 
-piladb_show_databases () {
+piladb_databases () {
   _piladb_get "databases"
 }
 
@@ -241,7 +274,7 @@ piladb_create_database () {
   fi
 }
 
-piladb_show_database () {
+piladb_database () {
   local DATABASE_NAME="$1"
 
   if [ -z "$DATABASE_NAME" ]; then
@@ -263,7 +296,7 @@ piladb_delete_database () {
   fi
 }
 
-piladb_show_stacks () {
+piladb_stacks () {
   local DATABASE_NAME="$1"
 
   if [ -z "$DATABASE_NAME" ]; then
@@ -289,9 +322,10 @@ piladb_create_stack () {
   fi
 }
 
-piladb_show_stack () {
+piladb_stack () {
   local DATABASE_NAME="$1"
   local STACK_NAME="$2"
+  local OP="$3"
 
   if [ -z "$DATABASE_NAME" ]; then
     _log "stacks: please provide a database name"
@@ -300,7 +334,7 @@ piladb_show_stack () {
     _log "stacks: please provide an stack name"
     _exit_or_return 1
   else
-    _piladb_get "databases/${DATABASE_NAME}/stacks/${STACK_NAME}"
+    _piladb_get "databases/${DATABASE_NAME}/stacks/${STACK_NAME}" "${OP}"
   fi
 }
 
@@ -330,12 +364,20 @@ piladb_PUSH () {
   elif [ -z "$STACK_NAME" ]; then
     _log "push: please provide an stack name"
     _exit_or_return 1
-  elif [ -z "${ELEMENT}" ]; then
+  elif [ -z "$ELEMENT" ]; then
     _log "push: please provide an element"
     _exit_or_return 1
   else
     _piladb_post "databases/${DATABASE_NAME}/stacks/${STACK_NAME}" "$ELEMENT"
   fi
+}
+
+piladb_BASE () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+  local ELEMENT="${@:3}"
+
+  piladb_PUSH "$DATABASE_NAME" "$STACK_NAME?base" "$ELEMENT"
 }
 
 piladb_POP () {
@@ -357,30 +399,7 @@ piladb_PEEK () {
   local DATABASE_NAME="$1"
   local STACK_NAME="$2"
 
-  if [ -z "$DATABASE_NAME" ]; then
-    _log "push: please provide a database name"
-    _exit_or_return 1
-  elif [ -z "$STACK_NAME" ]; then
-    _log "push: please provide an stack name"
-    _exit_or_return 1
-  else
-    _piladb_get "databases/${DATABASE_NAME}/stacks/${STACK_NAME}?peek"
-  fi
-}
-
-piladb_SIZE () {
-  local DATABASE_NAME="$1"
-  local STACK_NAME="$2"
-
-  if [ -z "$DATABASE_NAME" ]; then
-    _log "push: please provide a database name"
-    _exit_or_return 1
-  elif [ -z "$STACK_NAME" ]; then
-    _log "push: please provide an stack name"
-    _exit_or_return 1
-  else
-    _piladb_get "databases/${DATABASE_NAME}/stacks/${STACK_NAME}?size"
-  fi
+  piladb_stack "$DATABASE_NAME" "$STACK_NAME" "peek"
 }
 
 piladb_FLUSH () {
@@ -397,3 +416,83 @@ piladb_FLUSH () {
     _piladb_delete "databases/${DATABASE_NAME}/stacks/${STACK_NAME}?flush"
   fi
 }
+
+piladb_ROTATE () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  if [ -z "$DATABASE_NAME" ]; then
+    _log "push: please provide a database name"
+    _exit_or_return 1
+  elif [ -z "$STACK_NAME" ]; then
+    _log "push: please provide an stack name"
+    _exit_or_return 1
+  else
+    _piladb_post_no_payload "databases/${DATABASE_NAME}/stacks/${STACK_NAME}?rotate"
+  fi
+}
+
+piladb_BLOCK () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  if [ -z "$DATABASE_NAME" ]; then
+    _log "stacks: please provide a database name"
+    _exit_or_return 1
+  elif [ -z "$STACK_NAME" ]; then
+    _log "stacks: please provide an stack name"
+    _exit_or_return 1
+  else
+    _piladb_put "databases/${DATABASE_NAME}/stacks/$STACK_NAME?block"
+  fi
+}
+
+piladb_UNBLOCK () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  if [ -z "$DATABASE_NAME" ]; then
+    _log "stacks: please provide a database name"
+    _exit_or_return 1
+  elif [ -z "$STACK_NAME" ]; then
+    _log "stacks: please provide an stack name"
+    _exit_or_return 1
+  else
+    _piladb_put "databases/${DATABASE_NAME}/stacks/$STACK_NAME?unblock"
+  fi
+}
+
+piladb_SIZE () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  piladb_stack "$DATABASE_NAME" "$STACK_NAME" "size"
+}
+
+piladb_EMPTY () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  piladb_stack "$DATABASE_NAME" "$STACK_NAME" "empty"
+}
+
+piladb_FULL () {
+  local DATABASE_NAME="$1"
+  local STACK_NAME="$2"
+
+  piladb_stack "$DATABASE_NAME" "$STACK_NAME" "full"
+}
+
+### ALIASES
+
+alias PUSH='piladb_PUSH'
+alias BASE='piladb_BASE'
+alias POP='piladb_POP'
+alias PEEK='piladb_PEEK'
+alias FLUSH='piladb_FLUSH'
+alias ROTATE='piladb_ROTATE'
+alias BLOCK='piladb_BLOCK'
+alias UNBLOCK='piladb_UNBLOCK'
+alias SIZE='piladb_SIZE'
+alias EMPTY='piladb_EMPTY'
+alias FULL='piladb_FULL'
