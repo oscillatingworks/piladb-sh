@@ -68,6 +68,11 @@ _piladb_delete () {
 piladb_help () {
   _log 'usage: piladb_*
 
+  # if you want to use piladb in a remote host,
+  # you can set PILADB_HOST for that purpose.
+  # e.g. export PILADB_HOST=my.piladb.server:8080
+  # default value is 127.0.0.1:1205
+
   # download pilad in $HOME/bin and add it to PATH
   # version: default is 0.1.5
   # os: linux, darwin. default is linux.
@@ -140,9 +145,6 @@ piladb_help () {
   # ROTATE stack
   piladb_ROTATE $database_name $stack_name
 
-  # ROTATE stack
-  piladb_ROTATE $database_name $stack_name
-
   # BLOCK stack
   piladb_BLOCK $database_name $stack_name
 
@@ -152,10 +154,15 @@ piladb_help () {
   # SIZE of stack
   piladb_SIZE $database_name $stack_name
 
+  # Stack is EMPTY
+  piladb_SIZE $database_name $stack_name
+
+  # Stack is FULL
+  piladb_FULL $database_name $stack_name
+
 requirements:
 
   httpie: https://github.com/jkbrzt/httpie#installation
-  PILADB_HOST set, e.g. export PILADB_HOST=127.0.0.1:1205  # mandatory for remote server
 
 thank you!
 
