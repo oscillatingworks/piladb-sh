@@ -33,8 +33,8 @@ Run `bash piladb_test.sh`.
 Examples
 --------
 
-Start a local server, create a database and a stack, `PUSH` random number
-from 1 to 10, and stop the server:
+Start a local server, create a database and a stack, `PUSH` an integer, a string
+a boolean and a JSON object, and stop the server:
 
 ```bash
 #!/bin/bash
