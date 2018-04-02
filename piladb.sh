@@ -251,7 +251,7 @@ piladb_config_set () {
   if [ -z "$CONFIG_KEY" ]; then
     _log "config: please provide a config key"
     _exit_or_return 1
-  elif [ -z "${CONFIG_VALUE}" ]; then
+  elif [ -z "$CONFIG_VALUE" ]; then
     _log "config: please provide a config value"
     _exit_or_return 1
   else
@@ -359,13 +359,13 @@ piladb_PUSH () {
   local ELEMENT="${@:3}"
 
   if [ -z "$DATABASE_NAME" ]; then
-    _log "push: please provide a database name"
+    _log "push/base: please provide a database name"
     _exit_or_return 1
   elif [ -z "$STACK_NAME" ]; then
-    _log "push: please provide an stack name"
+    _log "push/base: please provide an stack name"
     _exit_or_return 1
   elif [ -z "$ELEMENT" ]; then
-    _log "push: please provide an element"
+    _log "push/base: please provide an element"
     _exit_or_return 1
   else
     _piladb_post "databases/${DATABASE_NAME}/stacks/${STACK_NAME}" "$ELEMENT"
@@ -385,10 +385,10 @@ piladb_POP () {
   local STACK_NAME="$2"
 
   if [ -z "$DATABASE_NAME" ]; then
-    _log "push: please provide a database name"
+    _log "pop: please provide a database name"
     _exit_or_return 1
   elif [ -z "$STACK_NAME" ]; then
-    _log "push: please provide an stack name"
+    _log "pop: please provide an stack name"
     _exit_or_return 1
   else
     _piladb_delete "databases/${DATABASE_NAME}/stacks/${STACK_NAME}"
@@ -407,10 +407,10 @@ piladb_FLUSH () {
   local STACK_NAME="$2"
 
   if [ -z "$DATABASE_NAME" ]; then
-    _log "push: please provide a database name"
+    _log "flush: please provide a database name"
     _exit_or_return 1
   elif [ -z "$STACK_NAME" ]; then
-    _log "push: please provide an stack name"
+    _log "flush: please provide an stack name"
     _exit_or_return 1
   else
     _piladb_delete "databases/${DATABASE_NAME}/stacks/${STACK_NAME}?flush"
@@ -437,10 +437,10 @@ piladb_BLOCK () {
   local STACK_NAME="$2"
 
   if [ -z "$DATABASE_NAME" ]; then
-    _log "stacks: please provide a database name"
+    _log "block: please provide a database name"
     _exit_or_return 1
   elif [ -z "$STACK_NAME" ]; then
-    _log "stacks: please provide an stack name"
+    _log "block: please provide an stack name"
     _exit_or_return 1
   else
     _piladb_put "databases/${DATABASE_NAME}/stacks/$STACK_NAME?block"
@@ -452,10 +452,10 @@ piladb_UNBLOCK () {
   local STACK_NAME="$2"
 
   if [ -z "$DATABASE_NAME" ]; then
-    _log "stacks: please provide a database name"
+    _log "unblock: please provide a database name"
     _exit_or_return 1
   elif [ -z "$STACK_NAME" ]; then
-    _log "stacks: please provide an stack name"
+    _log "unblock: please provide an stack name"
     _exit_or_return 1
   else
     _piladb_put "databases/${DATABASE_NAME}/stacks/$STACK_NAME?unblock"
