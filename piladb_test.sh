@@ -8,7 +8,7 @@ _require jq || exit 1
 
 # download pilad from Github
 
-piladb_download 0.2.0-alpha.20180328 linux
+piladb_download 0.2.0-alpha.20180407 linux
 
 
 # start test pilad
